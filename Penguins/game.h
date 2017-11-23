@@ -85,7 +85,7 @@ static void assignFunctionsToPointers(Game* game)
 }
 
 //function to create Game returns NULL when failed
-static Game* createGame(int numberOfPlayers, Dimension boardDim)
+Game* createGame(int numberOfPlayers, Dimension boardDim)
 {
     Game* retv = (Game*) malloc(sizeof(Game));
     if(retv == NULL)
