@@ -4,7 +4,7 @@ typedef struct Player Player;
 struct Player
 {
     int score;
-    int availablePlayers;
+    int availablePenguins;
 };
 
 void initPlayer(int score, int availablePenguins, Player* field)
