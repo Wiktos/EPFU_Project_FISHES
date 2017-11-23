@@ -24,6 +24,7 @@ struct Game
     GameStates state;
     //functions
     Field* (*getField)(int, int, Game*);
+    Player* (*getPlayer)(int, Game*);
     void (*finalize)(Game*);
 };
 
@@ -58,6 +59,11 @@ static Field* getField(int row, int col, Game* game)
     return (Field*)&game->board[row][col];
 }
 
+static Player* getPlayer(int playerId, Game* game)
+{
+    return (Player*)&game->players[playerId];
+}
+
 //freeing memory needs to be called at the end of game
 static void finalize(Game* game)
 {
@@ -74,6 +80,7 @@ static void finalize(Game* game)
 static void assignFunctionsToPointers(Game* game)
 {
     game->getField = &getField;
+    game->getPlayer = &getPlayer;
     game->finalize = &finalize;
 }
 
