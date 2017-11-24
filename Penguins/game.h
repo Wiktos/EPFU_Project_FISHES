@@ -1,18 +1,13 @@
 #pragma once
 #include "player.h"
 #include "field.h"
+#include "dimension.h"
 
 typedef enum GameStates GameStates;
 enum GameStates { BEGINNING,
                   PLACEMENT,
                   GAME,
                   GAMEOVER};
-
-typedef struct Dimension Dimension;
-struct Dimension
-{
-    int row, col;
-};
 
 typedef struct Game Game;
 struct Game
@@ -64,7 +59,7 @@ static Player* getPlayer(int playerId, Game* game)
     return (Player*)&game->players[playerId];
 }
 
-//freeing memory needs to be called at the end of game
+//destructor
 static void finalize(Game* game)
 {
     free(game->players);
@@ -84,7 +79,7 @@ static void assignFunctionsToPointers(Game* game)
     game->finalize = &finalize;
 }
 
-//function to create Game returns NULL when failed
+//constructor
 Game* createGame(int numberOfPlayers, Dimension boardDim)
 {
     Game* retv = (Game*) malloc(sizeof(Game));
