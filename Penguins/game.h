@@ -14,13 +14,13 @@ struct Game
 {
     //data
     Player* players;
+    int numberOfPlayers;
     Field** board;
     Dimension boardDimension;
     GameStates state;
     //functions
     Field* (*getField)(int, int, Game*);
     Player* (*getPlayer)(int, Game*);
-    void (*finalize)(Game*);
 };
 
 static Field** allocateMap(Dimension dimension)
@@ -59,24 +59,10 @@ static Player* getPlayer(int playerId, Game* game)
     return (Player*)&game->players[playerId];
 }
 
-//destructor
-static void finalize(Game* game)
-{
-    free(game->players);
-    int i;
-    for(i = 0; i < game->boardDimension.row; i++)
-    {
-        free(game->board[i]);
-    }
-    free(game->board);
-    free(game);
-}
-
 static void assignFunctionsToPointers(Game* game)
 {
     game->getField = &getField;
     game->getPlayer = &getPlayer;
-    game->finalize = &finalize;
 }
 
 //constructor
@@ -85,6 +71,11 @@ Game* createGame(int numberOfPlayers, Dimension boardDim)
     Game* retv = (Game*) malloc(sizeof(Game));
     if(retv == NULL)
         return NULL;
+
+    if(numberOfPlayers <= 0)
+        return NULL;
+
+    retv->numberOfPlayers = numberOfPlayers;
 
     retv->players = (Player*) calloc(numberOfPlayers, sizeof(Player));
     if(retv->players == NULL)
@@ -100,4 +91,17 @@ Game* createGame(int numberOfPlayers, Dimension boardDim)
     assignFunctionsToPointers(retv);
 
     return retv;
+}
+
+//destructor
+void finalizeGame(Game* game)
+{
+    free(game->players);
+    int i;
+    for(i = 0; i < game->boardDimension.row; i++)
+    {
+        free(game->board[i]);
+    }
+    free(game->board);
+    free(game);
 }

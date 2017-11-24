@@ -17,9 +17,15 @@ static void write(Game* game)
 //constructor
 GameWriter* createGameWriter(char* path)
 {
-    GameWriter retv;
-    retv.outputFilePath = path;
-    retv.write = &write;
+    GameWriter* retv = (GameWriter*) malloc(sizeof(GameWriter));
+    retv->outputFilePath = path;
+    retv->write = &write;
 
-    return (GameWriter*)&retv;
+    return retv;
+}
+
+//destructor
+void finalizeGameWriter(GameWriter* writer)
+{
+    free(writer);
 }

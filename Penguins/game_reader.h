@@ -16,7 +16,7 @@ static Game* readGame()
     //reading and initializing values of player and field
 
     //temporary solution
-    Dimension* boardDim = createDimension(4, 4);
+    Dimension* boardDim = createDimension(20000, 10010);
     Game* retGame = createGame(3, *boardDim);
 
     return retGame;
@@ -32,10 +32,16 @@ static void readInputParams(int argc, char** argv)
 //constructor
 GameReader* createGameReader(char* path)
 {
-    GameReader retv;
-    retv.inputFilePath = path;
-    retv.readGame = &readGame;
-    retv.readInputParams = &readInputParams;
+    GameReader* retv = (GameReader*) malloc(sizeof(GameReader));
+    retv->inputFilePath = path;
+    retv->readGame = &readGame;
+    retv->readInputParams = &readInputParams;
 
-    return (GameReader*)&retv;
+    return retv;
+}
+
+//destructor
+void finalizeGameReader(GameReader* reader)
+{
+    free(reader);
 }
