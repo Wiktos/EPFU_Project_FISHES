@@ -9,7 +9,7 @@ int main(int argc, char** argv)
         1. Read program params
         2. Check correctness of params
     */
-    GameReader* reader = createGameReader("path_to_input_file");
+    GameReader* reader = createGameReader();
     reader ->readInputParams(argc, argv);
 
     /*  Phase 2 : Input file
@@ -20,7 +20,7 @@ int main(int argc, char** argv)
             3. Assign data to Game structure
         }
     */
-    Game* game = reader->readGame();
+    Game* game = reader->readGame("path_to_input_file");
     finalizeGameReader(reader);
 
     game->state = PLACEMENT;
