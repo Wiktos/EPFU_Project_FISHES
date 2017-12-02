@@ -100,7 +100,7 @@ void finalizeGame(Game* game)
     int i;
     for(i = 0; i < game->boardDimension.row; i++)
     {
-        finalizeDimension(game->board[i]);
+        free(game->board[i]);
     }
     free(game->board);
     free(game);
