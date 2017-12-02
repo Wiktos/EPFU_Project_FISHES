@@ -8,8 +8,14 @@ struct Dimension
 
 Dimension* createDimension(int row, int col)
 {
-    Dimension retv;
-    retv.row = row;
-    retv.col = col;
-    return (Dimension*)&retv;
+    Dimension* retv = (Dimension*) malloc(sizeof(Dimension));
+    retv->row = row;
+    retv->col = col;
+
+    return retv;
+}
+
+void finalizeDimension(Dimension* dim)
+{
+    free(dim);
 }

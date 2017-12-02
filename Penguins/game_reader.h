@@ -18,7 +18,7 @@ static Game* readGame()
     //temporary solution
     Dimension* boardDim = createDimension(20000, 10010);
     Game* retGame = createGame(3, *boardDim);
-
+    finalizeDimension(boardDim);
     return retGame;
 }
 

@@ -49,7 +49,7 @@ static bool isInProperRange(int row, int col, Game* game)
 static Field* getField(int row, int col, Game* game)
 {
     if(!isInProperRange(row, col, game))
-        exit(0);
+        exit(EXIT_FAILURE);
 
     return (Field*)&game->board[row][col];
 }
@@ -100,7 +100,7 @@ void finalizeGame(Game* game)
     int i;
     for(i = 0; i < game->boardDimension.row; i++)
     {
-        free(game->board[i]);
+        finalizeDimension(game->board[i]);
     }
     free(game->board);
     free(game);

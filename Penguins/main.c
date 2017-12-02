@@ -67,9 +67,9 @@ int main(int argc, char** argv)
     /*
         Phase 6 : Deallocating memory of game
     */
-    //int i; scanf("%d", &i);   can be deleted just to see if memory is deallocated properly
+   // int i; scanf("%d", &i);   //can be deleted just to see if memory is deallocated properly
     finalizeGame(game);
-    //int j; scanf("%d", &j);    can be deleted just to see if memory is deallocated properly
+    //int j; scanf("%d", &j);    //can be deleted just to see if memory is deallocated properly
 
     return 0;
 }
