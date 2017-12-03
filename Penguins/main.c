@@ -3,6 +3,8 @@
 #include "game_reader.h"
 #include "game_writer.h"
 
+#include "algorithms.h"
+
 int main(int argc, char** argv)
 {
     /*  Phase 1 : Program params
@@ -42,18 +44,27 @@ int main(int argc, char** argv)
     //Phase 4 : Playing game
     while(game->state == GAME)
     {
-        int i;
+		int i;
+		bool isThereAnyMovement = false;
         for(i = 0; i < game->numberOfPlayers; ++i)
         {
             /*
-                1. Check if current player has possible movement if no go to the next player
-                2. Ask for movement
-                3. Check if movement is possible if no ask again
-                4. Update Game attributes and results
-                5. Notify Game.state if it needs to be changed -> change Game.state = GAMEOVER
+                1. Check if current player has possible movement if no go to the next player [\/]
+                2. Ask for movement [\/]
+                3. Check if movement is possible if no ask again [\/]
+                4. Update Game attributes and results [\/] (score, occupied, existence, etc. are changing in handleMovement())
+                5. Notify Game.state if it needs to be changed -> change Game.state = GAMEOVER ( right now it only checks if there is any player who has movement, if not then gameover)
             */
+			if (!hasAvaibleMovement(i, game))continue;
+			isThereAnyMovement = true;
+
+			int StartX, StartY, EndX, EndY;
+			do{
+				scanf("%d %d %d %d", &StartX, &StartY, &EndX, &EndY);
+			} while (!handleMovment(StartX, StartY, EndX, EndY, i, game));
+			
         }
-        game->state = GAMEOVER;
+       if(!isThereAnyMovement)game->state = GAMEOVER;
     }
 
       /*

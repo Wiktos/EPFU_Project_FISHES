@@ -1,10 +1,12 @@
 #pragma once
 #include <stdbool.h>
 
+
 typedef struct Field Field;
 struct Field
 {
-    int fishNumber;
+	int PlayerID;
+	int fishNumber;
     bool OCCUPIED_FLAG;
     bool EXISTANCE_FLAG;
 };
