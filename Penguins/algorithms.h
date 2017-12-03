@@ -1,5 +1,4 @@
 #pragma once
-#include "player.h"
 #include "game.h"
 
 #define max(a,b) \
