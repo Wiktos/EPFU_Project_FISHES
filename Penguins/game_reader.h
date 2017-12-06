@@ -19,8 +19,8 @@ bool checkFieldProperty(int, int);
 //reads game from input file function
 static Game* readGame(char* inputFilePath)
 {
-    int numberOfPlayers = 2, availablePenguins = 1, sumOfScores = 0;
-    int temp, i, j, scoreTemp;
+    int numberOfPlayers, availablePenguins, sumOfScore;
+    int temp, i, j;
     Dimension boardDim;
     boardDim.row = 10;
     boardDim.col = 10;
@@ -34,25 +34,16 @@ static Game* readGame(char* inputFilePath)
     if(retGame == NULL)
         goto ErrorHandler;
 
-    if (fscanf(filePointer, "%d", &numberOfPlayers) != 1)
+    if (fscanf(filePointer, "%d", &numberOfPlayers) != 1 || checkNumberOfPlayers(numberOfPlayers) == false)
         goto ErrorHandler;
-
-    else if(checkNumberOfPlayers(numberOfPlayers) == false)
-	goto ErrorHandler;
 
     if (fscanf(filePointer, "%d", &availablePenguins) != 1)
         goto ErrorHandler;
 
-    if (fscanf(filePointer, "%d", &boardDim.row) != 1)
+    if (fscanf(filePointer, "%d", &boardDim.row) != 1 || checkDimmension(boardDim.row) == false)
 	goto ErrorHandler;
 
-    else if(checkDimmension(boardDim.row) == false)
-	goto ErrorHandler;
-
-    if (fscanf(filePointer, "%d", &boardDim.col) != 1)
-	goto ErrorHandler;
-
-    else if(checkDimmension(boardDim.col) == false)
+    if (fscanf(filePointer, "%d", &boardDim.col) != 1 || checkDimmension(boardDim.col) == false)
 	goto ErrorHandler;
 
     temp = boardDim.com * boardDim.row;
@@ -60,11 +51,8 @@ static Game* readGame(char* inputFilePath)
     if(checkNumberOfPenguins(availablePenguins, temp) == false)
 	goto ErrorHandler;
 
-    int x = feof(filePointer) ? EOF : 0;
-    while (x != EOF && x != '\n') x = fgetc(filePointer);
 
-
-    int* scores = (int*) calloc(numberOfPlayers, sizeof(int));
+    int* score = (int*) calloc(numberOfPlayers, sizeof(int));
 
     //2. Read scores for every player to scores table
 
@@ -73,9 +61,9 @@ static Game* readGame(char* inputFilePath)
             goto ErrorHandler;
 
         sumOfScore += score[i];
-        scoreTemp = score[i];
+        temp = score[i];
 
-        else if(checkScoreOfPlayer(scoreTemp, sumOfScore) == false)
+        if(checkScoreOfPlayer(temp, sumOfScore) == false)
             goto ErrorHandler;
     }
 
@@ -88,12 +76,11 @@ static Game* readGame(char* inputFilePath)
     int currField = numberOfPlayers + 1; // +1 because we don't expect that value in input file so every validation function will return false
 
 	for(i = 0; i < numberOfRows; i++){
-        for(j = 0; j < numberOfColumns; j++){
-            if (fscanf(filePointer, "%d", &currField) != 1)
-                goto ErrorHandler;
-
-            else if (checkFieldProperty(currField, numberOfPlayers) == false)
-                goto ErrorHaldner;
+           for(j = 0; j < numberOfColumns; j++){
+              if(fscanf(filePointer,"%d",&currField) != 0 || checkFieldProperty(currField, numberOfPlayers) == true){
+		//initialize currField to structure
+	      }
+              else goto ErrorHandler;
 
         }
 
@@ -134,12 +121,13 @@ void finalizeGameReader(GameReader* reader)
     free(reader);
 }
 
+
 bool checkNumberOfPlayers(int n){
 	if(n<2) return false;
 	else return true;
 }
 
-bool checkNumberOfPenguins(int n, int k)
+bool checkNumberOfPenguins(int n, int k){
 	if(n>=k) return false;
 	else return true;
 }
@@ -158,6 +146,4 @@ bool checkFieldProperty(int field, int n){
 	if((field>3)||(field<(-1)*n)) return false;
 	else return true;
 }
-
-
 
