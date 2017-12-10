@@ -27,8 +27,6 @@ int main(int argc, char** argv)
     //Phase 3 :  Placement penguin
     while(game->state == PLACEMENT)
     {
-        int x,y;
-
         int i;
         for(i = 0; i < game->numberOfPlayers; ++i)
         {
@@ -45,6 +43,7 @@ int main(int argc, char** argv)
     //Phase 4 : Playing game
     while(game->state == GAME)
     {
+        int i;
         for(i = 0; i < game->numberOfPlayers; ++i)
         {
             /*
@@ -55,8 +54,8 @@ int main(int argc, char** argv)
                 5. Notify Game.state if it needs to be changed -> change Game.state = GAMEOVER ( right now it only checks if there is any player who has movement, if not then gameover)
             */
 		game->state = GAMEOVER;
+        }
     }
-
       /*
         Phase 5 : Game over
         1. Print results

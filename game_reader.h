@@ -87,8 +87,10 @@ static Game* readGame(char* inputFilePath)
         goto ErrorHandler;
 
     if(checkNumberOfPenguins(availablePenguins, boardDim.col * boardDim.row) == false)
-	goto ErrorHandler;
-
+    {
+        finalizeGame(retGame);
+        goto ErrorHandler;
+    }
 
     int* scores = (int*) calloc(numberOfPlayers, sizeof(int));
 
@@ -101,6 +103,8 @@ static Game* readGame(char* inputFilePath)
     {
         initPlayer(scores[i], availablePenguins, retGame->getPlayer(i, retGame));
     }
+
+    free(scores);
 
     //3. Read and initialize every field
     result = readFields(retGame, filePointer);
