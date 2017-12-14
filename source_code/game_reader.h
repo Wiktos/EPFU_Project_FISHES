@@ -45,16 +45,15 @@ static bool readFields(Game* game, FILE* file)
 	{
            for(j = 0; j < boardDim.col; j++)
             {
-              if(fscanf(file,"%d",&currField) != 0 || checkFieldProperty(currField, game->numberOfPlayers) == true)
-              {
-                initField(currField, game->getField(i, j, game));
-              }
-              else
-                return false;
-
+                int result = fscanf(file, "%d", &currField);
+                if(result != EOF && result != 0 && checkFieldProperty(currField, game->numberOfPlayers))
+                {
+                    initField(currField, game->getField(i, j, game));
+                }
+                else
+                    return false;
             }
     }
-
     return true;
 }
 
@@ -70,7 +69,7 @@ static Game* readGame(char* inputFilePath)
     filePointer = fopen(inputFilePath, "r");
 
     //1. Read first row from input file to the variables above
-    if (fscanf(filePointer, "%d", &numberOfPlayers) != 1 || checkNumberOfPlayers(numberOfPlayers) == false)
+    if (fscanf(filePointer, "%d", &numberOfPlayers) != 1 || !checkNumberOfPlayers(numberOfPlayers))
         goto ErrorHandler;
 
     if (fscanf(filePointer, "%d", &availablePenguins) != 1)
@@ -87,10 +86,7 @@ static Game* readGame(char* inputFilePath)
         goto ErrorHandler;
 
     if(checkNumberOfPenguins(availablePenguins, boardDim.col * boardDim.row) == false)
-    {
-        finalizeGame(retGame);
         goto ErrorHandler;
-    }
 
     int* scores = (int*) calloc(numberOfPlayers, sizeof(int));
 
@@ -104,12 +100,12 @@ static Game* readGame(char* inputFilePath)
         initPlayer(scores[i], availablePenguins, retGame->getPlayer(i, retGame));
     }
 
-    free(scores);
-
     //3. Read and initialize every field
     result = readFields(retGame, filePointer);
+    if(!result)
+        goto ErrorHandler;
 
-     fclose(filePointer);
+    fclose(filePointer);
 
     return retGame;
 
@@ -133,28 +129,28 @@ void initGameReader(GameReader* reader)
     reader->readInputParams = &readInputParams;
 }
 
-bool checkNumberOfPlayers(int n){
-	if(n<2) return false;
-	else return true;
+bool checkNumberOfPlayers(int n)
+{
+	return n >= 2;
 }
 
-bool checkNumberOfPenguins(int n, int k){
-	if(n>=k) return false;
-	else return true;
+bool checkNumberOfPenguins(int numOfPenguins, int numOfFields)
+{
+	return numOfPenguins <= numOfFields;
 }
 
-bool checkDimmension(int n){
-	if(n<2) return false;
-	else return true;
+bool checkDimmension(int n)
+{
+    return n >= 2;
 }
 
-bool checkScoreOfPlayer(int score, int sum){
-	if((score<0)||(score>sum)) return false;
-	else return true;
+bool checkScoreOfPlayer(int score, int sum)
+{
+	return !((score<0)||(score>sum));
 }
 
-bool checkFieldProperty(int field, int n){
-	if((field>3)||(field<(-1)*n)) return false;
-	else return true;
+bool checkFieldProperty(int field, int n)
+{
+	return !((field > 3 )||(field < (-1) * n));
 }
 

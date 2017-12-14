@@ -16,7 +16,7 @@ void initField(int fishNumber, Field* field)
     if(fishNumber < 0)
     {
         field->OCCUPIED_FLAG = true;
-        field->playerID = fabs(fishNumber);
+        field->playerID = fabs(fishNumber) - 1;
     }
     else
     {
