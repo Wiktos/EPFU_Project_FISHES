@@ -134,12 +134,12 @@ static int checkMoveDirection(int x, int y, int endX, int endY){
         return -1;
     }
     if(x%2 != endX%2){// if one is even and the other is odd
-        if(!abs(differenceX + 1)/2 == abs(differenceY))return -1;
+        if(!((abs(differenceX) + 1)/2 == abs(differenceY)  || (abs(differenceX) - 1)/2 == abs(differenceY)))return -1;
     }
-    if(differenceX > 0 && differenceY > 0)return 2;
-    if(differenceX > 0 && differenceY < 0)return 3;
-    if(differenceX < 0 && differenceY > 0)return 4;
-    if(differenceX < 0 && differenceY < 0)return 5;
+    if(differenceX > 0 && differenceY >= 0)return 2;
+    if(differenceX > 0 && differenceY <= 0)return 3;
+    if(differenceX < 0 && differenceY >= 0)return 4;
+    if(differenceX < 0 && differenceY <= 0)return 5;
 
     return -1;
 }
@@ -251,6 +251,7 @@ static void movementPhase(Game* game){
                 movePossible = isMovePossible(x, y, endX, endY, i, game);
 
                 if(movePossible != 0){
+                        fseek(stdin,0,SEEK_END);
                         SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
 
                          switch(movePossible){
