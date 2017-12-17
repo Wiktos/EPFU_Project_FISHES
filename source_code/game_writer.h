@@ -1,8 +1,6 @@
 #pragma once
 #include "game.h"
-
-#define ANSI_COLOR_GREEN    "\x1b[32m"
-#define ANSI_COLOR_RESET   "\x1b[0m"
+#include "windows.h"
 
 typedef struct GameWriter GameWriter;
 struct GameWriter
@@ -55,9 +53,18 @@ static void write(Game* game, char* path)
 
 static void displayBoard(Game* game)
 {
+    system("cls");
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
+    WORD saved_attributes;
+
+    /* Save current attributes */
+    GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
+    saved_attributes = consoleInfo.wAttributes;
+
     int i,j;
     //works only in Windows enviroment
-    system("cls");
+
 
     printf("Current scores : \n");
     for(i = 0; i < game->numberOfPlayers; i++)
@@ -69,20 +76,27 @@ static void displayBoard(Game* game)
     printf("\n  ");
     for(i = 0; i < game->boardDimension.row; i++)
     {
+        SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
         if(i % 2)
-            printf(ANSI_COLOR_GREEN "_%d___" ANSI_COLOR_RESET, i);
+            printf("_%d___", i);
         else
-            printf(ANSI_COLOR_GREEN "%d__" ANSI_COLOR_RESET, i);
+            printf("%d__", i);
+        SetConsoleTextAttribute(hConsole, saved_attributes);
     }
 
     printf("  \n");
 
     for(i = 0; i < game->boardDimension.row; i++)
     {
-        printf(ANSI_COLOR_GREEN "%d|" ANSI_COLOR_RESET, i);
+        SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
+        if(i % 2)
+            printf("| |\n|%d| ", i);
+        else
+            printf("|%d| ", i);
+
+        SetConsoleTextAttribute(hConsole, saved_attributes);
         for(j = 0; j < game->boardDimension.col; j++)
         {
-
             if(i%2 == 0)
             {
                 if(!game->getField(i,j,game)->EXISTANCE_FLAG)
@@ -91,7 +105,7 @@ static void displayBoard(Game* game)
                     printf("%d   ",game->getField(i,j,game)->fishNumber);
                 if(game->getField(i,j,game)->OCCUPIED_FLAG)
                 {
-                  printf("P%d  ",game->getField(i, j, game)->playerID + 1);
+                  printf("P%d  ",game->getField(i,j, game)->playerID + 1);
                 }
 
             }
@@ -108,6 +122,10 @@ static void displayBoard(Game* game)
             }
         }
         printf("\n");
+        SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
+        if(i % 2)printf("| |\n");
+        SetConsoleTextAttribute(hConsole, saved_attributes);
+
     }
     printf("\n");
 }
