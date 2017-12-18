@@ -9,6 +9,8 @@ struct Field
     int playerID;
     bool OCCUPIED_FLAG;
     bool EXISTANCE_FLAG;
+
+    bool POSSIBLEMOVECOLOR;
 };
 
 void initField(int fishNumber, Field* field);

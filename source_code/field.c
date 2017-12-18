@@ -2,6 +2,7 @@
 
 void initField(int fishNumber, Field* field)
 {
+    field->POSSIBLEMOVECOLOR = false;
     if(fishNumber < 0)
     {
         field->OCCUPIED_FLAG = true;
