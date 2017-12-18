@@ -15,6 +15,7 @@ struct Game
     //data
     Player* players;
     int numberOfPlayers;
+    int numberOfPenguins;
     Field** board;
     Dimension boardDimension;
     GameStates state;

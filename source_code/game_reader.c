@@ -88,6 +88,7 @@ Game* readGame(char* inputFilePath)
         initPlayer(scores[i], availablePenguins, retGame->getPlayer(i, retGame));
     }
 
+    retGame->numberOfPenguins = availablePenguins;
     //3. Read and initialize every field
     result = readFields(retGame, filePointer);
     if(!result)
