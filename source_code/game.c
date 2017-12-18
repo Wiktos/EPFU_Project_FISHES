@@ -20,8 +20,8 @@ Field** allocateMap(Dimension dimension)
 
 bool isInProperRange(int row, int col, Game* game)
 {
-    return row <= game->boardDimension.row && row >= 0
-            && col <= game->boardDimension.col && col >= 0;
+    return row < game->boardDimension.row && row >= 0
+            && col < game->boardDimension.col && col >= 0;
 }
 
 Field* getField(int row, int col, Game* game)
