@@ -9,7 +9,10 @@ int main(int argc, char** argv)
     initGameReader(&reader);
     reader.readInputParams(argc, argv);
 
+
     Game* game = reader.readGame("./resources/input.txt");
+
+
 
     Algorithms gamePhase;
     initAlgorithms(&gamePhase);
