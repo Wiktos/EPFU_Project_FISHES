@@ -1,3 +1,4 @@
+#include <string.h>
 #include "game_reader.h"
 
 //reads game from input file function
@@ -103,12 +104,22 @@ ErrorHandler :
     exit(EXIT_FAILURE);
 }
 
-
-//reads input parameters    TODO : CHANGE RETURN VALUE
-void readInputParams(int argc, char** argv)
+CommandParams readInputParams(int argc, char* argv[])
 {
-    //do reading
-    return /*PARAMS STRUCTURE*/;
+    CommandParams retVal;
+
+    retVal.inputPath = argv[1];
+    retVal.outputPath = argv[2];
+    retVal.player = atoi(argv[3]);
+
+    if(strcmp("placement", argv[4]) == 0)
+        retVal.phase = PLACEMENT;
+    else if(strcmp("movement", argv[4])  == 0)
+        retVal.phase = MOVEMENT;
+    else
+        exit(EXIT_FAILURE);
+
+    return retVal;
 }
 
 //constructor

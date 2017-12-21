@@ -3,10 +3,10 @@
 #include "field.h"
 #include "dimension.h"
 
-typedef enum GameStates GameStates;
-enum GameStates { BEGINNING,
+typedef enum GameState GameState;
+enum GameState { BEGINNING,
                   PLACEMENT,
-                  GAME,
+                  MOVEMENT,
                   GAMEOVER};
 
 typedef struct Game Game;
@@ -18,7 +18,7 @@ struct Game
     int numberOfPenguins;
     Field** board;
     Dimension boardDimension;
-    GameStates state;
+    GameState state;
     //functions
     Field* (*getField)(int, int, Game*);
     Player* (*getPlayer)(int, Game*);

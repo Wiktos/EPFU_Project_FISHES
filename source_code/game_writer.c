@@ -1,13 +1,14 @@
 #include "game_writer.h"
+#include "algorithms.h"
 #include <stdio.h>
 
 void write(Game* game, char* path)
 {
     int i, j;
     FILE * fp;
+    fp = fopen(path, "w");
     if(fp == NULL)
         goto ErrorHandler;
-    fp = fopen(path, "w");
 
     //first row
     fprintf(fp, "%d ", game->numberOfPlayers);
@@ -45,19 +46,14 @@ void write(Game* game, char* path)
 
 void displayBoard(Game* game)
 {
+    #ifdef _WIN32
     system("cls");
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
-    WORD saved_attributes;
-
-    /* Save current attributes */
-    GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
-    saved_attributes = consoleInfo.wAttributes;
+    #endif // _WIN32
+    #ifdef __linux__
+    system("clear");
+    #endif // _WIN32
 
     int i,j;
-    //works only in Windows enviroment
-
-
     printf("Current scores : \n");
     for(i = 0; i < game->numberOfPlayers; i++)
     {
@@ -65,7 +61,7 @@ void displayBoard(Game* game)
         printf("Player %d : %d\n", i + 1, currPlayer->score);
     }
 
-    if(game->state == GAME){
+    if(game->state == MOVEMENT){
     printf("\n");
     printf("Players in game : \n");
     for(i = 0; i<game->numberOfPlayers; ++i){
@@ -78,65 +74,87 @@ void displayBoard(Game* game)
     printf("\n  ");
     for(i = 0; i < game->boardDimension.row; i++)
     {
-        SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
         if(i % 2)
-            printf("_%d___", i);
-        else
-            printf("%d__", i);
-        SetConsoleTextAttribute(hConsole, saved_attributes);
+        {
+            char msg[16];
+            sprintf(msg, "_%d___", i);
+            PRINT(msg, GREEN);
+        }
+        else{
+            char msg[16];
+            sprintf(msg, "%d__", i);
+            PRINT(msg, GREEN);
+        }
     }
 
     printf("  \n");
 
     for(i = 0; i < game->boardDimension.row; i++)
     {
-        SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
-        if(i % 2)
-            printf("| |\n|%d| ", i);
-        else
-            printf("|%d| ", i);
+        if(i % 2){
+            char msg[16];
+            sprintf(msg, "| |\n|%d| ", i);
+            PRINT(msg, GREEN);
+        }
+        else{
+           char msg[16];
+            sprintf(msg, "|%d| ", i);
+            PRINT(msg, GREEN);
+        }
 
-        SetConsoleTextAttribute(hConsole, saved_attributes);
         for(j = 0; j < game->boardDimension.col; j++)
         {
-            if(game->getField(i,j,game)->POSSIBLEMOVECOLOR)SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE);
             if(i%2 == 0)
             {
 
 
                 if(!game->getField(i,j,game)->EXISTANCE_FLAG){
-                    SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
-                    printf("X   ");
+                    PRINT("X   ", RED);
                 }
-                if(game->getField(i,j,game)->EXISTANCE_FLAG && !game->getField(i,j,game)->OCCUPIED_FLAG)
-                    printf("%d   ",game->getField(i,j,game)->fishNumber);
+                if(game->getField(i,j,game)->EXISTANCE_FLAG && !game->getField(i,j,game)->OCCUPIED_FLAG){
+                    if(game->getField(i,j,game)->POSSIBLEMOVECOLOR){
+                        char msg[16];
+                        sprintf(msg, "%d   ",game->getField(i,j,game)->fishNumber);
+                        PRINT(msg, BLUE);
+                    }else{
+                        printf("%d   ",game->getField(i,j,game)->fishNumber);
+                    }
+
+                }
                 if(game->getField(i,j,game)->OCCUPIED_FLAG)
                 {
-                    SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN);
-                    printf("P%d  ",game->getField(i,j, game)->playerID + 1);
+                        char msg[16];
+                        sprintf(msg, "P%d   ",game->getField(i,j,game)->playerID + 1);
+                        PRINT(msg, YELLOW);
                 }
 
             }
             else
             {
                 if(!game->getField(i,j,game)->EXISTANCE_FLAG){
-                    SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
-                    printf("  X ");
+                    PRINT("X   ", RED);
                 }
-                if(game->getField(i,j,game)->EXISTANCE_FLAG && !game->getField(i,j,game)->OCCUPIED_FLAG)
-                    printf("  %d ",game->getField(i,j,game)->fishNumber);
+                if(game->getField(i,j,game)->EXISTANCE_FLAG && !game->getField(i,j,game)->OCCUPIED_FLAG){
+                    if(game->getField(i,j,game)->POSSIBLEMOVECOLOR){
+                        char msg[16];
+                        sprintf(msg, "  %d ",game->getField(i,j,game)->fishNumber);
+                        PRINT(msg, BLUE);
+                    }else{
+                        printf("  %d ",game->getField(i,j,game)->fishNumber);
+                    }
+                }
                 if(game->getField(i,j,game)->OCCUPIED_FLAG)
                 {
-                    SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN);
-                    printf(" P%d ",game->getField(i,j,game)->playerID + 1);
+                        char msg[16];
+                        sprintf(msg, " P%d ",game->getField(i,j,game)->playerID + 1);
+                        PRINT(msg, YELLOW);
                 }
             }
-            SetConsoleTextAttribute(hConsole, saved_attributes);
         }
         printf("\n");
-        SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
-        if(i % 2)printf("| |\n");
-        SetConsoleTextAttribute(hConsole, saved_attributes);
+        if(i % 2){
+            PRINT("| |\n", GREEN);
+        }
 
     }
     printf("\n");

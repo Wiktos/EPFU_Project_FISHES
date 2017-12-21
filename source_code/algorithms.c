@@ -299,7 +299,7 @@ void movementPhase(Game* game){
 
     bool isThereAnyMovement = false;
     int i=0;
-    while(game->state == GAME)
+    while(game->state == MOVEMENT)
     {
         isThereAnyMovement = false;
 
