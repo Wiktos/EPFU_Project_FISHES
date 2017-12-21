@@ -9,7 +9,14 @@ struct Algorithms
     void (*placement)(Game*);
     void (*movement)(Game*);
 };
-
+enum COLOR{
+    DEFAULT,
+    RED,
+    GREEN,
+    BLUE,
+    YELLOW
+};
+void    PRINT(char * msg, enum COLOR color);
 void    placementPhase(Game* game);
 bool    checkFieldProperToMove(int x, int y, Game* game);
 bool    checkingMovementRecursive(int x, int y, int endX, int endY, int movementDirection, Game* game);

@@ -1,16 +1,41 @@
 #include "algorithms.h"
+#include <stdlib.h>
+#include <stdio.h>
+
+void PRINT(char * msg, enum COLOR color){
+    #ifdef _WIN32
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
+    WORD saved_attributes;
+    GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
+    saved_attributes = consoleInfo.wAttributes;
+    switch(color){
+        default: { break;}
+        case DEFAULT : {break;}
+        case RED : {SetConsoleTextAttribute(hConsole, FOREGROUND_RED); break;}
+        case GREEN : {SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN); break;}
+        case BLUE : {SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE); break;}
+        case YELLOW : {SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN); break;}
+    }
+
+    printf("%s", msg);
+    SetConsoleTextAttribute(hConsole, saved_attributes);
+    #endif
+    #ifdef __linux__
+      switch(color){
+        default: { break;}
+        case DEFAULT : {printf("%s", msg); break;}
+        case RED : {printf("\x1b[31m%s\x1b[0m", msg); break;}
+        case GREEN : {printf("\x1b[32m%s\x1b[0m", msg); break;}
+        case BLUE : {printf("\x1b[34m%s\x1b[0m", msg); break;}
+        case YELLOW : {printf("\x1b[33m%s\x1b[0m", msg); break;}
+    }
+    #endif
+}
 
 
 void placementPhase(Game* game)
 {
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
-    WORD saved_attributes;
-
-    /* Save current attributes */
-    GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
-    saved_attributes = consoleInfo.wAttributes;
-
     while(game->state == PLACEMENT)
     {
         GameWriter writer;
@@ -30,8 +55,9 @@ void placementPhase(Game* game)
 
                   while(1)    //Do it until field is correct
                   {
-
-                    printf("Player %d give coordinates, [ROW : COLUMN] for placing a penguin: ", j + 1);
+                    char msg[256];
+                    sprintf(msg, "Player %d give coordinates, [ROW : COLUMN] for placing a penguin: ", j + 1);
+                    PRINT(msg, DEFAULT);
                     scanf("%d %d",&x,&y);
 
                     if(isChosenFieldCorrect(x, y, game))  //if coordinates are correct assign a player for a field
@@ -42,9 +68,7 @@ void placementPhase(Game* game)
                     else
                     {
                         fseek(stdin,0,SEEK_END);
-                        SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
-                        printf("WRONG COORDINATES !\n");
-                        SetConsoleTextAttribute(hConsole, saved_attributes);
+                        PRINT("WRONG COORDINATES !\n", RED);
                     }
                   }
             }
@@ -269,14 +293,6 @@ bool hasAvaibleMovement(Game* game, int Player){
 }
 
 void movementPhase(Game* game){
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
-    WORD saved_attributes;
-
-    /* Save current attributes */
-    GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
-    saved_attributes = consoleInfo.wAttributes;
-
     GameWriter writer;
     initGameWriter(&writer);
     writer.displayBoardOnConsol(game);
@@ -291,7 +307,7 @@ void movementPhase(Game* game){
             writer.displayBoardOnConsol(game);
             if(!hasAvaibleMovement(game, i)){
                 printf("Player %d has no avaible movement.\nPress any key to continue.", i+1);
-                getch();
+                getchar();
                 continue;
             }
             else isThereAnyMovement = true;
@@ -310,24 +326,20 @@ void movementPhase(Game* game){
                     x = Coords[0];
                     y = Coords[1];
                     printf("Start position has been chosen automatically to %d %d.\nPress any key to continue.", x, y);
-                    getch();
+                    getchar();
                     continue;
                 }
 
                 startCoords = checkStartPosition(x, y, i, game);
                 if(startCoords != 0){
                         fseek(stdin,0,SEEK_END);
-                        SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
 
                          switch(startCoords){
                             default : {break;}
-                            case 1  : { printf("WRONG COORDINATES !\n");break;}
-                            case 2  : { printf("INVALID START POSITION !\n");break;}
+                            case 1  : { PRINT("WRONG COORDINATES !\n", RED);break;}
+                            case 2  : { PRINT("INVALID START POSITION !\n", RED);break;}
                         }
                 }
-
-                SetConsoleTextAttribute(hConsole, saved_attributes);
-
 
                 }while(startCoords != 0);
 
@@ -342,17 +354,14 @@ void movementPhase(Game* game){
                         resetFieldColors(game);
                         writer.displayBoardOnConsol(game);
                         fseek(stdin,0,SEEK_END);
-                        SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
 
                          switch(movePossible){
                             default : {break;}
-                            case 1  : { printf("WRONG COORDINATES !\n");break;}
-                            case 2  : { printf("INVALID START POSITION !\n");break;}
-                            case 3  : { printf("INVALID DESTINATION !\n");break;}
-                            case 4  : { printf("INVALID MOVEMENT !\n");break;}
+                            case 1  : { PRINT("WRONG COORDINATES !\n", RED);break;}
+                            case 2  : { PRINT("INVALID START POSITION !\n", RED);break;}
+                            case 3  : { PRINT("INVALID DESTINATION !\n", RED);break;}
+                            case 4  : { PRINT("INVALID MOVEMENT !\n", RED);break;}
                         }
-
-                        SetConsoleTextAttribute(hConsole, saved_attributes);
                 }
             }while(movePossible != 0);
 
