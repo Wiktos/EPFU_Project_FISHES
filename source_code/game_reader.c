@@ -7,6 +7,8 @@ bool checkNumberOfPenguins(int, int);
 bool checkDimmension(int);
 bool checkScoreOfPlayer(int, int);
 bool checkFieldProperty(int, int);
+bool checkIsDigit(char);
+bool checkInputPropertines(char[]);
 
 bool readScores(int* destination, int numOfPlayers, FILE* file)
 {
@@ -110,7 +112,13 @@ CommandParams readInputParams(int argc, char* argv[])
 
     retVal.inputPath = argv[1];
     retVal.outputPath = argv[2];
-    retVal.player = atoi(argv[3]);
+
+    if(checkInputPropertines(argv[3]))
+    {
+        retVal.player = atoi(argv[3]);
+    }
+    else
+        exit(EXIT_FAILURE);
 
     if(strcmp("placement", argv[4]) == 0)
         retVal.phase = PLACEMENT;
@@ -153,5 +161,25 @@ bool checkFieldProperty(int field, int n)
 {
 	return !((field > 3 )||(field < (-1) * n));
 }
+
+bool checkIsDigit(char c)
+{
+   return c >= '0' && c <= '9';
+}
+
+bool checkInputPropertines(char argv[])
+{
+    if(atoi(argv) < 0)
+        return false;
+
+    int i;
+    for(i = 0; i < strlen(argv); i++)
+    {
+        if(!checkIsDigit(argv[i]))
+            return false;
+    }
+    return true;
+}
+
 
 
