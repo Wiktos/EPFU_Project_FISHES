@@ -115,7 +115,7 @@ CommandParams readInputParams(int argc, char* argv[])
 
     if(checkInputPropertines(argv[3]))
     {
-        retVal.player = atoi(argv[3]);
+        retVal.player = atoi(argv[3])-1;
     }
     else
         exit(EXIT_FAILURE);

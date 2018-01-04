@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "game_reader.h"
 #include "command_params.h"
 #include "algorithms.h"
@@ -9,6 +10,7 @@
 
 int main(int argc, char** argv)
 {
+    srand(time(NULL));
     GameReader reader;
     initGameReader(&reader);
 
