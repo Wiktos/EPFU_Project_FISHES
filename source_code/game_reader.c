@@ -108,6 +108,9 @@ ErrorHandler :
 
 CommandParams readInputParams(int argc, char* argv[])
 {
+	if(argc < 5)
+		exit(EXIT_FAILURE);
+
     CommandParams retVal;
 
     retVal.inputPath = argv[1];
