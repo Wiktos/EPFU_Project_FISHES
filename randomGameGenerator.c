@@ -20,15 +20,18 @@ bool placementChecker(int row, int col, int field[row][col], int penguins){
 
 int main()
 {
-    int players, seed, penguins, i, ii;
+    int players, seed, helper, penguins, i, ii;
     time_t tt;
     seed = time(&tt);
     srand(seed);
-    players = 2 + rand() % 5;
+    puts("RANDOM GAME GENERATOR \nInput number of players");
+    scanf("%d", &players);
     FILE * fp;
     fp = fopen("input.txt", "w");
     fprintf(fp, "%d ", players);
-    penguins = players + (rand() % 5) * players;
+    puts("Input number of penguins per one player");
+    scanf("%d", &helper);
+    penguins = players * helper;
     fprintf(fp, "%d ", penguins);
     int columns, rows;
     columns = rand() % 11;
