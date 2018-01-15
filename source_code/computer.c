@@ -14,7 +14,7 @@ void placement(Game* game, int player)
         }
         int x = rand()%game->boardDimension.row;
         int y = rand()%game->boardDimension.col;
-        if(isChosenFieldCorrect(x, y, game)){placeOnField(x, y, player, game);FieldGood = true;}
+        if(isChosenFieldCorrect(x, y, game)){placeOnField(x, y, player, game);FieldGood = true; printf("PLACEMENT ON: %d %d \n", x, y);}
 
     }while(!FieldGood);
 }
@@ -22,6 +22,7 @@ void placement(Game* game, int player)
 void movement(Game* game, int player)
 {
     printf("AI : PERFORMED MOVEMENT\n");
+
         bool FieldGood = false;
     do{
             if(!hasAvaibleMovement(game, player)){
@@ -29,14 +30,16 @@ void movement(Game* game, int player)
                 break;
         }
 
+
         int x = rand()%game->boardDimension.row;
         int y = rand()%game->boardDimension.col;
+
         int endX = rand()%game->boardDimension.row;
         int endY = rand()%game->boardDimension.col;
 
         if(isMovePossible(x, y, endX, endY, player, game) == 0){
             performMovement(x, y, endX, endY, game);
-            printf("%d %d %d %d", x, y, endX, endY);
+            printf("MOVEMENT ON: %d %d %d %d", x, y, endX, endY);
             FieldGood = true;
         }
 

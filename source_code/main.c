@@ -6,6 +6,7 @@
 #include "algorithms.h"
 #include "computer.h"
 
+
 //******* AUTOMATED MODE MAIN FUN ******************************
 
 int main(int argc, char** argv)
@@ -18,6 +19,7 @@ int main(int argc, char** argv)
 
     Game* game = reader.readGame(commandLineParams.inputPath);
 
+    //+1 because we mark players from 0 - numberOfPlayers - 1
     if(commandLineParams.player + 1 > game->numberOfPlayers)
     {
         printf("Command line parameter : Wrong player number\n");

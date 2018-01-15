@@ -12,7 +12,7 @@ void write(Game* game, char* path)
 
     //first row
     fprintf(fp, "%d ", game->numberOfPlayers);
-    fprintf(fp, "%d ", game->getPlayer(0, game)->availablePenguins);
+    fprintf(fp, "%d ", game->getPlayer(game->numberOfPlayers-1, game)->availablePenguins);
     fprintf(fp, "%d ", game->boardDimension.row);
     fprintf(fp, "%d\n", game->boardDimension.col);
 
